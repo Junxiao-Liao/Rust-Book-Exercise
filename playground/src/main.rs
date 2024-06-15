@@ -142,21 +142,31 @@
 //     // println!("{s}");
 // }
 
+// fn main() {
+//     use std::collections::HashMap;
+
+//     let mut scores = HashMap::new();
+
+//     scores.insert(String::from("Blue"), 10);
+//     scores.insert(String::from("Yellow"), 50);
+
+//     let team_name = String::from("foo");
+//     // let score = scores.get(&team_name).copied().unwrap_or(0);
+//     let score = scores.get(&team_name);
+//     let score_value = match score {
+//         Some(i) => *i,
+//         _ => 0,
+//     };
+
+//     println!("{score_value}")
+// }
+#[derive(Debug)]
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
 fn main() {
-    use std::collections::HashMap;
-
-    let mut scores = HashMap::new();
-
-    scores.insert(String::from("Blue"), 10);
-    scores.insert(String::from("Yellow"), 50);
-
-    let team_name = String::from("foo");
-    // let score = scores.get(&team_name).copied().unwrap_or(0);
-    let score = scores.get(&team_name);
-    let score_value = match score {
-        Some(i) => *i,
-        _ => 0,
-    };
-
-    println!("{score_value}")
+    let work = Point { x: 5.0, y: 4.0f32 };
+    println!("{:#?}", work)
 }
