@@ -160,13 +160,13 @@
 
 //     println!("{score_value}")
 // }
-#[derive(Debug)]
-struct Point<T> {
-    x: T,
-    y: T,
-}
+// #[derive(Debug)]
+// struct Point<T> {
+//     x: T,
+//     y: T,
+// }
 
 fn main() {
-    let work = Point { x: 5.0, y: 4.0f32 };
-    println!("{:#?}", work)
+    // let work = Point { x: 5.0, y: 4.0f32 };
+    // println!("{:#?}", work)
 }
