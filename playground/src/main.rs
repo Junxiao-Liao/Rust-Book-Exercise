@@ -332,27 +332,102 @@
 //     println!("count after c goes out of scope = {}", Rc::strong_count(&a));
 // }
 
-#[derive(Debug)]
-enum List {
-    Cons(Rc<RefCell<i32>>, Rc<List>),
-    Nil,
-}
+// #[derive(Debug)]
+// enum List {
+//     Cons(Rc<RefCell<i32>>, Rc<List>),
+//     Nil,
+// }
 
-use crate::List::{Cons, Nil};
-use std::cell::RefCell;
-use std::rc::Rc;
+// use crate::List::{Cons, Nil};
+// use std::cell::RefCell;
+// use std::rc::Rc;
+
+// fn main() {
+//     let value = Rc::new(RefCell::new(5));
+
+//     let a = Rc::new(Cons(Rc::clone(&value), Rc::new(Nil)));
+
+//     let b = Cons(Rc::new(RefCell::new(3)), Rc::clone(&a));
+//     let c = Cons(Rc::new(RefCell::new(4)), Rc::clone(&a));
+
+//     *value.borrow_mut() += 10;
+
+//     println!("a after = {a:?}");
+//     println!("b after = {b:?}");
+//     println!("c after = {c:?}");
+// }
+
+// use std::thread;
+
+// fn main() {
+//     let v = vec![1, 2, 3];
+
+//     let handle = thread::spawn(move || {
+//         println!("Here's a vector: {v:?}");
+//     });
+
+//     handle.join().unwrap();
+// }
+
+// use std::sync::mpsc;
+// use std::thread;
+// use std::time::Duration;
+
+// fn main() {
+//     let (tx, rx) = mpsc::channel();
+
+//     thread::spawn(move || {
+//         let vals = vec![
+//             String::from("hi"),
+//             String::from("from"),
+//             String::from("the"),
+//             String::from("thread"),
+//         ];
+
+//         for val in vals {
+//             tx.send(val).unwrap();
+//             thread::sleep(Duration::from_secs(1));
+//         }
+//     });
+
+//     for received in rx {
+//         println!("Got: {received}");
+//     }
+// }
+
+// use std::sync::Mutex;
+
+// fn main() {
+//     let m = Mutex::new(5);
+
+//     {
+//         let mut num = m.lock().unwrap();
+//         *num = 6;
+//     }
+
+//     println!("m = {m:?}");
+// }
+
+use std::sync::{Arc, Mutex};
+use std::thread;
 
 fn main() {
-    let value = Rc::new(RefCell::new(5));
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
 
-    let a = Rc::new(Cons(Rc::clone(&value), Rc::new(Nil)));
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
 
-    let b = Cons(Rc::new(RefCell::new(3)), Rc::clone(&a));
-    let c = Cons(Rc::new(RefCell::new(4)), Rc::clone(&a));
+            *num += 1;
+        });
+        handles.push(handle);
+    }
 
-    *value.borrow_mut() += 10;
+    for handle in handles {
+        handle.join().unwrap();
+    }
 
-    println!("a after = {a:?}");
-    println!("b after = {b:?}");
-    println!("c after = {c:?}");
+    println!("Result: {}", *counter.lock().unwrap());
 }
